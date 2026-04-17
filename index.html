@@ -65,7 +65,7 @@
       <span>Best: <strong id="best">0</strong></span>
     </div>
     <div id="msg"></div>
-    <p id="help">Arrows or WASD to move. Space to pause. Eat the dot. Don’t hit walls or yourself.</p>
+    <p id="help">Arrows or WASD to move. Space to pause. Eat the dot. Crossing an edge wraps to the other side. Don’t run into yourself.</p>
   </div>
 
   <script>
@@ -139,16 +139,17 @@
         return a.x === -b.x && a.y === -b.y;
       }
 
+      function wrapAxis(value) {
+        return ((value % GRID) + GRID) % GRID;
+      }
+
       function step() {
         dir = nextDir;
         var head = snake[0];
-        var nh = { x: head.x + dir.x, y: head.y + dir.y };
-
-        if (nh.x < 0 || nh.x >= GRID || nh.y < 0 || nh.y >= GRID) {
-          gameOver = true;
-          setMessage("Wall — press Space to play again");
-          return;
-        }
+        var nh = {
+          x: wrapAxis(head.x + dir.x),
+          y: wrapAxis(head.y + dir.y)
+        };
 
         for (var i = 0; i < snake.length; i++) {
           if (snake[i].x === nh.x && snake[i].y === nh.y) {
