@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Snake</title>
+  <title>Snake — ARCADE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; }
     body {
@@ -13,59 +16,149 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: system-ui, sans-serif;
-      background: #0f1419;
-      color: #e6edf3;
+      font-family: "Share Tech Mono", ui-monospace, monospace;
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 20%, rgba(80, 0, 120, 0.35) 0%, transparent 55%),
+        radial-gradient(ellipse 80% 60% at 80% 90%, rgba(0, 200, 200, 0.12) 0%, transparent 45%),
+        linear-gradient(175deg, #06060f 0%, #0c1020 40%, #080612 100%);
+      color: #c8f0ff;
     }
-    h1 {
-      margin: 0 0 0.5rem;
-      font-weight: 600;
-      font-size: 1.5rem;
-      letter-spacing: 0.02em;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 1px,
+          rgba(0, 255, 247, 0.02) 1px,
+          rgba(0, 255, 247, 0.02) 2px
+        );
+      z-index: 0;
     }
     #wrap {
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.75rem;
+      gap: 1rem;
+      padding: 1.5rem;
+    }
+    .title-block {
+      text-align: center;
+    }
+    .title-block .eyebrow {
+      margin: 0 0 0.35rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: #ff2ea6;
+      text-shadow: 0 0 12px rgba(255, 46, 166, 0.65);
+    }
+    h1 {
+      margin: 0;
+      font-family: Orbitron, system-ui, sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.35rem, 4vw, 1.85rem);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #00fff7;
+      text-shadow:
+        0 0 8px rgba(0, 255, 247, 0.9),
+        0 0 24px rgba(0, 255, 247, 0.45),
+        0 0 2px #fff;
+    }
+    .arcade-shell {
+      position: relative;
+      padding: 3px;
+      background: linear-gradient(135deg, rgba(255, 46, 166, 0.55), rgba(0, 255, 247, 0.45));
+      border-radius: 6px;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.6),
+        0 12px 40px rgba(0, 0, 0, 0.55),
+        0 0 48px rgba(0, 255, 247, 0.15);
+    }
+    .screen-bezel {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #050508;
+      box-shadow: inset 0 0 0 2px rgba(0, 255, 247, 0.25);
+    }
+    .screen-bezel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.13) 2px,
+        rgba(0, 0, 0, 0.13) 4px
+      );
+      mix-blend-mode: multiply;
     }
     canvas {
       display: block;
-      border-radius: 8px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-      background: #161b22;
+      vertical-align: middle;
+      background: #070714;
     }
     #hud {
       display: flex;
-      gap: 1.5rem;
-      font-size: 0.95rem;
-      color: #8b949e;
+      gap: 2rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
-    #hud strong { color: #58a6ff; }
+    #hud span {
+      color: #7aa8b8;
+    }
+    #hud strong {
+      font-family: Orbitron, system-ui, sans-serif;
+      font-weight: 500;
+      color: #00fff7;
+      text-shadow: 0 0 10px rgba(0, 255, 247, 0.55);
+    }
     #msg {
       min-height: 1.25rem;
-      font-size: 0.9rem;
-      color: #f85149;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      color: #ff6b9d;
+      text-shadow: 0 0 8px rgba(255, 107, 157, 0.5);
     }
     #help {
-      font-size: 0.8rem;
-      color: #6e7681;
-      max-width: 320px;
+      margin: 0;
+      font-size: 0.72rem;
+      line-height: 1.65;
+      letter-spacing: 0.04em;
+      color: #5a7a88;
+      max-width: 22rem;
       text-align: center;
-      line-height: 1.5;
     }
   </style>
 </head>
 <body>
   <div id="wrap">
-    <h1>Snake</h1>
-    <canvas id="game" width="400" height="400" aria-label="Snake game canvas"></canvas>
+    <div class="title-block">
+      <p class="eyebrow">Retro vector sim</p>
+      <h1>Snake</h1>
+    </div>
+    <div class="arcade-shell">
+      <div class="screen-bezel">
+        <canvas id="game" width="400" height="400" aria-label="Snake game canvas"></canvas>
+      </div>
+    </div>
     <div id="hud">
-      <span>Score: <strong id="score">0</strong></span>
-      <span>Best: <strong id="best">0</strong></span>
+      <span>Score <strong id="score">0</strong></span>
+      <span>Best <strong id="best">0</strong></span>
     </div>
     <div id="msg"></div>
-    <p id="help">Arrows or WASD to move. Space to pause. Eat the dot. Crossing an edge wraps to the other side. Don’t run into yourself.</p>
+    <p id="help">Arrows or WASD to move. Space to pause. Eat the pulse. Edges wrap. Don’t collide with yourself.</p>
   </div>
 
   <script>
@@ -79,6 +172,11 @@
       var GRID = 20;
       var CELL = canvas.width / GRID;
       var TICK_MS = 110;
+
+      var BG = "#070714";
+      var GRID_LINE = "rgba(0, 255, 247, 0.12)";
+      var FOOD_CORE = "#ffcc00";
+      var FOOD_GLOW = "#ff2ea6";
 
       var snake;
       var dir;
@@ -154,7 +252,7 @@
         for (var i = 0; i < snake.length; i++) {
           if (snake[i].x === nh.x && snake[i].y === nh.y) {
             gameOver = true;
-            setMessage("You ran into yourself — Space to restart");
+            setMessage("Collision — Space to restart");
             return;
           }
         }
@@ -175,11 +273,16 @@
         }
       }
 
+      function clearGlow() {
+        ctx.shadowBlur = 0;
+        ctx.shadowColor = "transparent";
+      }
+
       function draw() {
-        ctx.fillStyle = "#161b22";
+        ctx.fillStyle = BG;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.strokeStyle = "#21262d";
+        ctx.strokeStyle = GRID_LINE;
         ctx.lineWidth = 1;
         for (var g = 0; g <= GRID; g++) {
           ctx.beginPath();
@@ -192,38 +295,53 @@
           ctx.stroke();
         }
 
-        ctx.fillStyle = "#f85149";
+        var fx = food.x * CELL + CELL / 2;
+        var fy = food.y * CELL + CELL / 2;
+        var fr = CELL * 0.38;
+        ctx.shadowBlur = 18;
+        ctx.shadowColor = FOOD_GLOW;
+        ctx.fillStyle = FOOD_CORE;
         ctx.beginPath();
-        ctx.arc(
-          food.x * CELL + CELL / 2,
-          food.y * CELL + CELL / 2,
-          CELL * 0.35,
-          0,
-          Math.PI * 2
-        );
+        ctx.arc(fx, fy, fr, 0, Math.PI * 2);
+        ctx.fill();
+        clearGlow();
+        ctx.fillStyle = "#fff8e0";
+        ctx.beginPath();
+        ctx.arc(fx - fr * 0.25, fy - fr * 0.25, fr * 0.22, 0, Math.PI * 2);
         ctx.fill();
 
         for (var i = 0; i < snake.length; i++) {
           var seg = snake[i];
-          var pad = 1;
-          var hue = 120 + (i / Math.max(snake.length, 1)) * 40;
-          ctx.fillStyle = i === 0 ? "#3fb950" : "hsl(" + hue + ", 45%, 42%)";
+          var pad = 1.5;
+          var t = i / Math.max(snake.length, 1);
+          if (i === 0) {
+            ctx.shadowBlur = 14;
+            ctx.shadowColor = "rgba(0, 255, 247, 0.85)";
+            ctx.fillStyle = "#00fff7";
+          } else {
+            var hue = 280 - t * 80;
+            ctx.fillStyle = "hsl(" + hue + ", 75%, " + (48 + t * 12) + "%)";
+          }
           ctx.fillRect(
             seg.x * CELL + pad,
             seg.y * CELL + pad,
             CELL - pad * 2,
             CELL - pad * 2
           );
+          clearGlow();
         }
 
         if (paused && !gameOver) {
-          ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+          ctx.fillStyle = "rgba(3, 5, 18, 0.72)";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = "#e6edf3";
-          ctx.font = "bold 20px system-ui, sans-serif";
+          ctx.fillStyle = "#00fff7";
+          ctx.font = '700 22px "Orbitron", system-ui, sans-serif';
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
+          ctx.shadowBlur = 12;
+          ctx.shadowColor = "rgba(0, 255, 247, 0.6)";
           ctx.fillText("Paused", canvas.width / 2, canvas.height / 2);
+          clearGlow();
           ctx.textAlign = "start";
           ctx.textBaseline = "alphabetic";
         }
