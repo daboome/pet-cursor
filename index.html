@@ -206,8 +206,8 @@
         for (var i = 0; i < snake.length; i++) {
           var seg = snake[i];
           var pad = 1;
-          var hue = 120 + (i / Math.max(snake.length, 1)) * 40;
-          ctx.fillStyle = i === 0 ? "#3fb950" : "hsl(" + hue + ", 45%, 42%)";
+          var hue = 48 + (i / Math.max(snake.length, 1)) * 14;
+          ctx.fillStyle = i === 0 ? "#ffc107" : "hsl(" + hue + ", 78%, 48%)";
           ctx.fillRect(
             seg.x * CELL + pad,
             seg.y * CELL + pad,
