@@ -316,11 +316,11 @@
           var t = i / Math.max(snake.length, 1);
           if (i === 0) {
             ctx.shadowBlur = 14;
-            ctx.shadowColor = "rgba(0, 255, 247, 0.85)";
-            ctx.fillStyle = "#00fff7";
+            ctx.shadowColor = "rgba(168, 85, 247, 0.85)";
+            ctx.fillStyle = "#a855f7";
           } else {
-            var hue = 280 - t * 80;
-            ctx.fillStyle = "hsl(" + hue + ", 75%, " + (48 + t * 12) + "%)";
+            var hue = 265 + t * 22;
+            ctx.fillStyle = "hsl(" + hue + ", 62%, " + (48 + t * 8) + "%)";
           }
           ctx.fillRect(
             seg.x * CELL + pad,
